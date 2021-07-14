@@ -1,0 +1,58 @@
+<ion-header >
+  <ion-navbar hideBackButton>
+    <ion-title>Profesional de la Salud</ion-title>
+  </ion-navbar>
+
+  <ion-toolbar>
+      <ion-segment [(ngModel)]="icons" color="primary">
+        <ion-segment-button id="SecurityCode" value="securityCode" (click)="securityCode()">
+          Código de Seguridad
+        </ion-segment-button>
+        <ion-segment-button id="All" value="all" (click)="obtainQRs('Todos')">
+          Todos
+        </ion-segment-button>
+        <ion-segment-button id="Pending" value="pending" (click)="obtainQRs('Pendiente')">
+          Pendientes
+        </ion-segment-button>
+        <ion-segment-button id="Enabled" value="enabled" (click)="obtainQRs('Activo')">
+          Habilitados
+        </ion-segment-button>
+        <ion-segment-button id="Disabled" value="disabled" (click)="obtainQRs('Inactivo')">
+          Deshabilitados
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-fab bottom right edge>
+    <button ion-fab mini item-end (click)="createQR()">+</button>
+  </ion-fab>
+  <ion-list *ngIf="!security_code">
+    <ion-item-sliding  #item *ngFor="let qr of qrs">
+      <ion-item>
+        <ion-thumbnail item-start>
+          <ngx-qrcode [qrc-value]="qr.id"></ngx-qrcode>
+        </ion-thumbnail>
+        <p item-end>{{qr.status}}</p>
+      </ion-item>   
+      <ion-item-options side="right">
+        <button ion-button color="secondary" (click)="openModal({qr_id: qr.id})">Información</button>
+        <button *ngIf="qr.status !=='Activo' && !all" ion-button color="success" (click)="enable(qr)">Habilitar</button>
+        <button *ngIf="qr.status!=='Inactivo' && !all" ion-button color="danger" (click)="disable(qr)">Inhabilitar</button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>   
+  <ion-list *ngIf="security_code">
+    <ion-item>
+      Código de Seguridad: {{this.code.securityNumber}}
+    </ion-item>  
+    <ion-item>
+      Fecha de expiración: {{this.code.expirationDate}}
+    </ion-item>    
+    <ion-item>
+      <button ion-button color="primary" (click)="generateSecurityCode()">Generar nuevo código</button>
+    </ion-item> 
+  </ion-list>   
+</ion-content>

@@ -1,0 +1,43 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Información
+      </ion-title>
+      <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+          <span ion-text color="primary" showWhen="ios">Cancel</span>
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-list>  
+        <ion-item>
+          Código QR
+          <ion-note item-end>
+            <ngx-qrcode [qrc-value]="qr.id"></ngx-qrcode>
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          Fecha de creación
+          <ion-note item-end>
+            {{qr.creationDate}}
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          Fecha última modificación
+          <ion-note item-end>
+            {{qr.modificationDate}}
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          Estado
+          <ion-note item-end>
+            {{qr.status}}
+          </ion-note>
+        </ion-item>
+    </ion-list>
+    <button ion-button full (click)="sendEmail()">Enviar por mail</button>
+  </ion-content>

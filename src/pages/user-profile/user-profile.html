@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-navbar hideBackButton>
+    <ion-title>Perfil de usuario</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-menu id="myMenu" [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Menú</ion-title>
+    </ion-toolbar>
+  </ion-header>
+</ion-menu>
+
+<ion-content padding>
+  <form [formGroup]="newUser" (ngSubmit)="saveChanges()" class="login-form">
+    <ion-item>
+      <ion-label color="dark-yellow">
+        e-mail 
+      </ion-label>
+      <ion-input type="email" formControlName="email" name="email"></ion-input>
+    </ion-item>       
+    <ion-item *ngIf="newUser.controls.email.dirty && newUser.controls.email.hasError('email')">
+      <p>e-mail inválido</p>
+    </ion-item>
+    <ion-item *ngIf="newUser.value.role_id=='Profesionales de la Salud'">
+      <ion-label color="dark-yellow">
+        Nombre 
+      </ion-label>
+      <ion-input type="text" formControlName="name" name="name"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="newUser.value.role_id=='Profesionales de la Salud'">
+      <ion-label color="dark-yellow">
+        Apellido 
+      </ion-label>
+      <ion-input type="text" formControlName="lastname" name="lastname"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="newUser.value.role_id=='Profesionales de la Salud'">
+      <ion-label color="dark-yellow">
+        Licencia médica
+      </ion-label>
+      <ion-input type="text" formControlName="license" name="license" disabled></ion-input>
+    </ion-item>
+    <ion-item *ngIf="newUser.value.role_id=='Farmacia'">
+      <ion-label color="dark-yellow">
+        Nombre de la farmacia 
+      </ion-label>
+      <ion-input type="text" formControlName="companyname" name="companyname"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="newUser.value.role_id=='Farmacia'">
+      <ion-label color="dark-yellow">
+        Razon social 
+      </ion-label>
+      <ion-input type="text" formControlName="businessname" name="businessname"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="newUser.value.role_id=='Farmacia'">
+      <ion-label color="dark-yellow">
+        CUIT/CUIL 
+      </ion-label>
+      <ion-input type="text" formControlName="document" name="document"></ion-input>
+    </ion-item>
+
+    <ion-item *ngIf="newUser.controls.document.hasError('minlength')">
+      <p>CUIT/CUIL incorrecto</p>
+    </ion-item>
+    <button type="submit" ion-button color="primary">
+      Guardar cambios
+    </button>
+  </form>
+</ion-content>

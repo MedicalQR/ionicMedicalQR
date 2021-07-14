@@ -1,0 +1,21 @@
+<ion-menu id="myMenu" [content]="content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menú</ion-title>
+      </ion-toolbar>
+    </ion-header>
+  
+    <ion-content>
+      <ion-list>
+        <button ion-item (click)="openProfile()">
+          Perfil de usuario
+        </button>
+        <button ion-item (click)="closeSession()">
+          Cerrar sesión
+        </button>
+      </ion-list>
+    </ion-content>
+  
+  </ion-menu>
+  
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
