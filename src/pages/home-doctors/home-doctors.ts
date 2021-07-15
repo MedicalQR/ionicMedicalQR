@@ -181,8 +181,9 @@ export class HomeDoctorsPage {
 
   generateSecurityCode(){
     let newSecurityCode = {};
+    let date = new Date();
     let today = new Date();
-    let expirationDate = new Date(today.setDate(today.getDate() + 30));
+    let expirationDate = new Date(date.setDate(date.getDate() + 30));
     newSecurityCode = {
       "id": Guid.create().toString(),
       "securityNumber": Math.floor(Math.random() * 999999).toString(),

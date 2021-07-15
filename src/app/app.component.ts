@@ -55,6 +55,7 @@ export class MyApp {
   }
 
   ngAfterViewInit() {
+    console.log("ngAfterViewInit");
     this.existingUser = null;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -75,10 +76,10 @@ export class MyApp {
                   console.log(this.existingUser.Status);
                   this.globalDataCtrl.setUserEmail(this.existingUser.email);
                   this.globalDataCtrl.setHomePage(HomeDoctorsPage);
-                  this.nav.push(HomeDoctorsPage);
+                  this.setRootPage(HomeDoctorsPage);
                 } else {
                   this.goToHome("Profesionales de la Salud");
-                  this.nav.push(LoginPage);
+                  this.setRootPage(LoginPage);
                 }
               }
             });
@@ -92,39 +93,46 @@ export class MyApp {
                     this.setGlobalInformation(pharmacy.id, "Farmacia");
                     this.globalDataCtrl.setUserEmail(this.existingUser.email);
                     this.globalDataCtrl.setHomePage(HomePharmacyPage);
-                    this.nav.push(HomePharmacyPage);
+                    this.setRootPage(HomePharmacyPage);
                   }
                 });
               }
-            });
+            })
+            .catch(function(e) {
+              console.log(e); // "oh, no!"
+            })
           }
           if(this.existingUser == null) {
-            this.nav.push(RegisterPage);
+            this.setRootPage(RegisterPage);
           }
+        })
+        .catch(function(e) {
+          console.log(e); // "oh, no!"
         })
       } else {
         // User is not authenticated.
-        
-        this.nav.push(LoginPage);
+        this.setRootPage(LoginPage);
       }
     });
   }
 
   setRootPage(page) {
     if (this.firstRun) {
-      // if its the first run we also have to hide the splash screen
-      this.nav.setRoot(page)
+      this.nav.push(page)
         .then(() => this.platform.ready())
+        .catch(function(e) {
+          console.log(e); // "oh, no!"
+        })
         .then(() => {
-
-          // Okay, so the platform is ready and our plugins are available.
-          // Here you can do any higher level native things you might need.
           this.statusBar.styleDefault();
           this.splashScreen.hide();
           this.firstRun = false;
-        });
+        })
+        .catch(function(e) {
+          console.log(e); // "oh, no!"
+        })
     } else {
-      this.nav.setRoot(page);
+      this.nav.push(page);
     }
   }
 
@@ -181,13 +189,12 @@ export class MyApp {
 
   openProfile(){
     this.menu.close();
-    this.nav.push(UserProfilePage);
+    this.setRootPage(UserProfilePage);
   }
 
   closeSession(){
-    // close the menu when clicking a link from the menu
-    this.menu.close();
-    // navigate to the new page if it is not the current page
-    this.nav.push(LoginPage);
+    firebase.auth().signOut().then(function(e) {
+      window.location.reload()
+    })
   }
 }
