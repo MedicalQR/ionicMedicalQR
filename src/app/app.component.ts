@@ -55,25 +55,20 @@ export class MyApp {
   }
 
   ngAfterViewInit() {
+    firebase.auth().signOut();
     console.log("ngAfterViewInit");
     this.existingUser = null;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        console.log("user");
-        console.log(user);
         this.uid  = user.uid;
         this.globalDataCtrl.setGmailId(this.uid);
         this.getDoctors().then((result) => {
           if(this.doctors.length > 0){
             this.doctors.forEach(doctor => {
               if(doctor.GmailID == this.uid){
-                console.log("doctor");
-                console.log(doctor);
                 this.existingUser = doctor;
                 this.setGlobalInformation(doctor.id, "Profesionales de la Salud");
                 if(this.existingUser.Status == 'Activo'){
-                  console.log("Status");
-                  console.log(this.existingUser.Status);
                   this.globalDataCtrl.setUserEmail(this.existingUser.email);
                   this.globalDataCtrl.setHomePage(HomeDoctorsPage);
                   this.setRootPage(HomeDoctorsPage);
@@ -146,7 +141,6 @@ export class MyApp {
       this.http.get(apiURL+'Doctors').subscribe((data: any[]) => {
         resolve(this.doctors = data);
       }, err => {
-        console.log("getDoctors error");
         console.log(err);
       });
     });
@@ -181,10 +175,11 @@ export class MyApp {
   showPrompt(message) {
     const alert = this.alertCtrl.create({
       title: 'Pendiente de habilitación',
-      subTitle: message,
-      buttons: ['OK']
+      subTitle: message
     });
-    alert.present();
+    alert.present().then(function(e) {
+      setTimeout(function(){ window.location.reload() }, 4000);
+    })
   }
 
   openProfile(){

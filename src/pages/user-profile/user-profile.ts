@@ -35,7 +35,6 @@ export class UserProfilePage {
       email : [this.loggedUser.email, Validators.compose([Validators.required, Validators.email])],
       role_id: this.globalDataCtrl.getRole()
     })
-    console.log(this.newUser );
   }
 
   ionViewWillEnter(){
@@ -53,7 +52,6 @@ export class UserProfilePage {
       url = "pharmacies/"
     }
     this.getUserById(url + user_id).then((result) => {
-      console.log(this.loggedUser);
       this.newUser.controls["document"].setValue(this.loggedUser.cuit);
       this.newUser.controls["license"].setValue(this.loggedUser.medicalLicense);
       this.newUser.controls["name"].setValue(this.loggedUser.name);

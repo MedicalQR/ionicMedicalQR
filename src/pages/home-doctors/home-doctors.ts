@@ -49,6 +49,9 @@ export class HomeDoctorsPage {
         if(this.allSecurityCodes.length > 0) {
           this.setActiveSecurityCode();
         }
+        else {
+          this.generateSecurityCode();
+        }
       }, err => {
         console.log(err);
       });
@@ -204,26 +207,31 @@ export class HomeDoctorsPage {
   }
 
   updateSecurityCode(){
-    let updatedSecurityCode = {};
-    let today = new Date();
-    updatedSecurityCode = {
-      "id": this.code.id,
-      "securityNumber": this.code.securityNumber,
-      "expirationDate": today,
-      "doctorId": this.doctorId,
-      "creationDate": this.code.creationDate
-    }
-
-    var apiURL = this.globalDataCtrl.getApiURL();
-    return new Promise(resolve => {
-      this.http.put(apiURL + "SecurityCodes/" + this.code.id, updatedSecurityCode).subscribe(data => {
-        resolve(data);
-        let securityTab = document.getElementById("SecurityCode");
-        securityTab.click();
-      }, err => {
-        console.log(err);
+    if(this.security_code == true) {
+      let updatedSecurityCode = {};
+      let today = new Date();
+      updatedSecurityCode = {
+        "id": this.code.id,
+        "securityNumber": this.code.securityNumber,
+        "expirationDate": today,
+        "doctorId": this.doctorId,
+        "creationDate": this.code.creationDate
+      }
+  
+      var apiURL = this.globalDataCtrl.getApiURL();
+      return new Promise(resolve => {
+        this.http.put(apiURL + "SecurityCodes/" + this.code.id, updatedSecurityCode).subscribe(data => {
+          resolve(data);
+          let securityTab = document.getElementById("SecurityCode");
+          securityTab.click();
+        }, err => {
+          console.log(err);
+        });
       });
-    });
-
+    }
+    else {
+      let securityTab = document.getElementById("SecurityCode");
+      securityTab.click();
+    }
   }
 }

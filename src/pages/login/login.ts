@@ -18,7 +18,6 @@ export class LoginPage {
   }
 
   ionViewDidLoad() {
-    console.log("ion view did load del login");
     this.authProvider.ui.start('#firebaseui-auth-container', AuthProvider.getUiConfig());
   }
 

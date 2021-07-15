@@ -82,7 +82,6 @@ export class ModalPharmacyPage {
 
         if(this.allSecurityCodes.length > 0) {
           this.allSecurityCodes.forEach(securityCode => {
-            console.log(this.info.code + " vs " + securityCode.securityNumber);
             if(this.info.code == securityCode.securityNumber){
               this.code = securityCode;
             }

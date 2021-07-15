@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
+import { Component, ViewChild} from '@angular/core';
+import { IonicPage, NavController,Nav, NavParams, MenuController } from 'ionic-angular';
 import {Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { LoginPage } from '../login/login';
 import { Guid } from "guid-typescript";
@@ -20,7 +20,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: 'register.html',
 })
 export class RegisterPage {
-
+  @ViewChild(Nav) nav: Nav;
   newUser : any = {};
   allPharmacies : any[];
   allDoctors : any[];
@@ -74,7 +74,6 @@ export class RegisterPage {
     this.newUser.value.document = this.newUser.value.document.replace('-', '');
 
     if(this.errorMessage != null){
-      console.log(this.errorMessage);
     }else if(this.newUser.value.role_id == "Profesionales de la Salud"){
       this.getDoctors().then((result) => {
         if(this.allDoctors.length > 0){
@@ -207,10 +206,16 @@ export class RegisterPage {
   showPrompt(message, title) {
     const alert = this.alertCtrl.create({
       title: title,
-      subTitle: message,
-      buttons: ['OK']
+      subTitle: message
     });
-    alert.present();
+    alert.present().then(function(e) {
+      setTimeout(function(){ 
+        window.location.reload()
+      }, 4000);
+    })
+  }
+
+  backToLogin(){
     this.navCtrl.push(LoginPage);
   }
 }
