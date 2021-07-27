@@ -161,7 +161,7 @@ export class RegisterPage {
       this.newUser.get("lastname").updateValueAndValidity();
     }else if (this.newUser.value.role_id == "Farmacia"){
       //Habilitar
-      this.newUser.controls["document"].setValidators([Validators.required])
+      this.newUser.controls["document"].setValidators([Validators.required, Validators.minLength(11), Validators.maxLength(11), Validators.pattern("[0-9]*")])
       this.newUser.get("document").updateValueAndValidity();
       this.newUser.controls["companyname"].setValidators([Validators.required])
       this.newUser.get("companyname").updateValueAndValidity();
@@ -216,6 +216,6 @@ export class RegisterPage {
   }
 
   backToLogin(){
-    this.navCtrl.push(LoginPage);
+    window.location.reload();
   }
 }
