@@ -3,6 +3,8 @@ import { ModalController, Platform, NavParams, ViewController } from 'ionic-angu
 import { IfStmt } from '@angular/compiler';
 import { HttpClient } from '@angular/common/http';
 import { GlobalDataProvider } from '../../providers/auth/global-data/global-data';
+import { Guid } from "guid-typescript";
+
 
 @Component({
   templateUrl: 'modal-pharmacy.html',
@@ -66,6 +68,7 @@ export class ModalPharmacyPage {
   }
 
   checkPrescription() {
+    let result = false;
     let validationCode = document.getElementById("validation_code");
     let validationDate = document.getElementById("validation_date");
     if(this.info.code != null) {
@@ -84,17 +87,22 @@ export class ModalPharmacyPage {
           this.allSecurityCodes.forEach(securityCode => {
             if(this.info.code == securityCode.securityNumber){
               this.code = securityCode;
+              result = true;
             }
             else {
-              this.writeMessage(false);
+              let result = false;
             }
           });
         }
         else {
-          this.writeMessage(false);
+          let result = false;
         }
-
-        this.verifyDetails(date, diffDays);
+        if(result) {
+          this.verifyDetails(date, diffDays);
+        }
+        else {
+          this.writeMessage(result);
+        }
       }
       else 
       validationDate.innerHTML = "Por favor, ingrese la fecha que figura en la receta.";
@@ -131,11 +139,51 @@ export class ModalPharmacyPage {
       let message = document.getElementById("message");
       message.innerHTML = "La receta pasó la validación exitosamente.";
       message.style.color = "green";
+
+      let pharmacy = this.globalDataCtrl.getPharmacy();
+      let medicalreceipt = {
+        "id": Guid.create().toString(),
+        "scanDate": new Date(),
+        "validationResult": "Exitoso",
+        "pharmacyId": pharmacy.id,
+        "uicId": this.qr.id,
+        "securityCodeId": this.info.code,
+        "applicationMessage": "La prescripción médica es válida."
+      }
+
+      var apiURL = this.globalDataCtrl.getApiURL();
+      return new Promise(resolve => {
+        this.http.post(apiURL+'MedicalReceipts', medicalreceipt).subscribe(data => {
+          resolve(data);
+        }, err => {
+          console.log(err);
+        });
+      });
     }
     else {
       let message = document.getElementById("message");
       message.innerHTML = "Error! La receta no pasó la validación.";
       message.style.color = "red";
+
+      let pharmacy = this.globalDataCtrl.getPharmacy();
+      let medicalreceipt = {
+        "id": Guid.create().toString(),
+        "scanDate": new Date(),
+        "validationResult": "Fallido",
+        "pharmacyId": pharmacy.id,
+        "uicId": this.qr.id,
+        "securityCodeId": this.info.code,
+        "applicationMessage": "Alguno de los datos ingresados no es válido. La prescripción médica no es válida."
+      }
+
+      var apiURL = this.globalDataCtrl.getApiURL();
+      return new Promise(resolve => {
+        this.http.post(apiURL+'MedicalReceipts', medicalreceipt).subscribe(data => {
+          resolve(data);
+        }, err => {
+          console.log(err);
+        });
+      });
     }
   }
 }

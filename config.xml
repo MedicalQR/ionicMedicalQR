@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.firebaseui" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="io.medicalqr.thesis" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>MedicalQR</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -87,11 +87,11 @@
     <plugin name="cordova-plugin-browsertab" spec="^0.2.0" />
     <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
     <plugin name="cordova-plugin-customurlscheme" spec="^4.3.0">
-        <variable name="URL_SCHEME" value="io.ionic.firebaseui" />
+        <variable name="URL_SCHEME" value="io.medicalqr.thesis" />
     </plugin>
     <universal-links>
-        <host name="w2nsc.app.goo.gl" scheme="https" />
-        <host name="ionicfirebaseui.firebaseapp.com" scheme="https">
+        <host name="medicalqr.page.link" scheme="https" />
+        <host name="medicalqr-42850.firebaseapp.com" scheme="https">
             <path url="/__/auth/callback" />
         </host>
     </universal-links>

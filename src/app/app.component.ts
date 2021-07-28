@@ -43,12 +43,18 @@ export class MyApp {
 
     // Initialize Firebase
     const config = {
-      apiKey: "AIzaSyB0qxCieE7-B0aM0m03qdoSomMk0xVG3dY",
+      /*apiKey: "AIzaSyB0qxCieE7-B0aM0m03qdoSomMk0xVG3dY",
       authDomain: "ionicfirebaseui.firebaseapp.com",
       databaseURL: "https://ionicfirebaseui.firebaseio.com",
       projectId: "ionicfirebaseui",
       storageBucket: "ionicfirebaseui.appspot.com",
-      messagingSenderId: "281186760812"
+      messagingSenderId: "281186760812"*/
+      apiKey: "AIzaSyDUBtCAdjZem5IbH9PqMhudLVAXxJNq51o",
+      authDomain: "medicalqr-42850.firebaseapp.com",
+      databaseURL: "https://medicalqr-42850.firebaseio.com",
+      projectId: "medicalqr-42850",
+      storageBucket: "medicalqr-42850.appspot.com",
+      messagingSenderId: "988656361007"
     };
 
     firebase.initializeApp(config);
@@ -56,7 +62,6 @@ export class MyApp {
 
   ngAfterViewInit() {
     firebase.auth().signOut();
-    console.log("ngAfterViewInit");
     this.existingUser = null;
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -88,6 +93,7 @@ export class MyApp {
                     this.setGlobalInformation(pharmacy.id, "Farmacia");
                     this.globalDataCtrl.setUserEmail(this.existingUser.email);
                     this.globalDataCtrl.setHomePage(HomePharmacyPage);
+                    this.globalDataCtrl.setPharmacy(pharmacy);
                     this.setRootPage(HomePharmacyPage);
                   }
                 });
@@ -185,6 +191,11 @@ export class MyApp {
   openProfile(){
     this.menu.close();
     this.setRootPage(UserProfilePage);
+  }
+
+  openHome(){
+    this.menu.close();
+    this.setRootPage(this.globalDataCtrl.getHomePage());
   }
 
   closeSession(){

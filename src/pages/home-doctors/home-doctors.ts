@@ -66,7 +66,7 @@ export class HomeDoctorsPage {
     }
     var sortedCodes = this.allSecurityCodes.sort(compareDate); 
     this.code = sortedCodes[0]; 
-    this.code.expirationDate = new Date(this.code.expirationDate).toLocaleString();
+    this.code.expirationDate = new Date(this.code.expirationDate).toLocaleString().split(' ')[0];
     this.security_code = true; 
   }
   
@@ -134,15 +134,6 @@ export class HomeDoctorsPage {
     qr.status = "Activo";
     qr.modificationDate = new Date();
     this.updateQR(qr);
-
-    if(oldStatus == "Pendiente"){
-      let pending = document.getElementById("Pending");
-      pending.click();
-    }
-    else {
-      let disabled = document.getElementById("Disabled");
-      disabled.click();
-    } 
   }
 
   disable(qr){
@@ -150,15 +141,6 @@ export class HomeDoctorsPage {
     qr.status = "Inactivo";
     qr.modificationDate = new Date();
     this.updateQR(qr);
-
-    if(oldStatus == "Pendiente"){
-      let pending = document.getElementById("Pending");
-      pending.click();
-    }
-    else {
-      let enabled = document.getElementById("Enabled");
-      enabled.click();
-    } 
   }
 
   updateQR(updatedQR){
@@ -167,6 +149,15 @@ export class HomeDoctorsPage {
       this.http.put(apiURL + "UniqueIdentifierCodes/" + updatedQR.id, updatedQR).subscribe(data => {
         resolve(data);
         this.showPrompt();
+        if(updatedQR.status == "Activo"){
+          let enabled = document.getElementById("Enabled");
+          enabled.click();
+        }
+        else {
+          let disabled = document.getElementById("Disabled");
+          disabled.click();
+        }
+
       }, err => {
         console.log(err);
       });

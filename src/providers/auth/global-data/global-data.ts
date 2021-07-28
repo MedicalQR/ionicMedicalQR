@@ -13,6 +13,7 @@ export class GlobalDataProvider {
   user_id : any;
   email: any;
   role : any;
+  pharmacy: any;
   gmail_id : any;
   facebook_id : any;
   homePage : any;
@@ -26,6 +27,7 @@ export class GlobalDataProvider {
     this.facebook_id = "";
     this.sessionFlag = "";
     this.role = "";
+    this.pharmacy = {};
     this.homePage = {};
     this.apiUrl = 'http://medicalqrwebapp.azurewebsites.net/api/';
   }
@@ -76,6 +78,14 @@ export class GlobalDataProvider {
 
   getSessionFlag() {
     return this.sessionFlag;
+  }
+
+  setPharmacy(value) {
+    this.pharmacy = value;
+  }
+
+  getPharmacy() {
+    return this.pharmacy;
   }
 
   setHomePage(value) {

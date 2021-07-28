@@ -1,6 +1,7 @@
 <ion-header >
   <ion-navbar hideBackButton>
-    <ion-title>Profesional de la Salud</ion-title>
+    <button ion-button menuToggle>Toggle Menu</button>
+    <ion-title>&gt;&gt;   Profesional de la Salud</ion-title>
   </ion-navbar>
 
   <ion-toolbar>
@@ -35,7 +36,7 @@
         <ion-thumbnail item-start>
           <ngx-qrcode [qrc-value]="qr.id"></ngx-qrcode>
         </ion-thumbnail>
-        <p item-end>{{qr.status}}</p>
+        <p item-end>&lt;</p>
       </ion-item>   
       <ion-item-options side="right">
         <button ion-button color="secondary" (click)="openModal({qr_id: qr.id})">Información</button>

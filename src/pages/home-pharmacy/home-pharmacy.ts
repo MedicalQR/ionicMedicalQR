@@ -21,10 +21,12 @@ export class HomePharmacyPage {
   scannedCode = null;
   qr: any;
   doctor: any;
+  pharmacy: any;
  
   constructor(public navCtrl: NavController, public menu: MenuController, public navParams: NavParams, private barcodeScanner: BarcodeScanner, public modalCtrl: ModalController, public menuCtrl: MenuController, public globalDataCtrl: GlobalDataProvider, public http: HttpClient) 
   {
     this.menuCtrl.enable(true, "myMenu");
+    this.pharmacy = this.globalDataCtrl.getPharmacy();
   }
 
   ionViewDidLoad() 
@@ -33,9 +35,9 @@ export class HomePharmacyPage {
   }
 
   scanCode() {
-    this.barcodeScanner.scan().then(barcodeData => {
-      this.scannedCode = barcodeData.text;
-      this.scannedCode = "408e53ef-2c75-4fa5-8b6f-dff72b41938f";
+    /*this.barcodeScanner.scan().then(barcodeData => {
+      this.scannedCode = barcodeData.text;*/
+      this.scannedCode = "5548ed03-1a6c-a352-db75-a0e1b1a480a6";
       var apiURL = this.globalDataCtrl.getApiURL();
       return new Promise(resolve => {
         this.http.get(apiURL+'UniqueIdentifierCodes/' + this.scannedCode).subscribe((data: any[]) => {
@@ -45,10 +47,10 @@ export class HomePharmacyPage {
           console.log(err);
         });
       });
-    }, 
+    /*}, 
     (err) => {
       alert('Error: ' + err);
-    });
+    });*/
   }
   
   getDoctorInformation() {
