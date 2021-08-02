@@ -69,6 +69,7 @@ export class ModalPharmacyPage {
 
   checkPrescription() {
     let result = false;
+    let message = "";
     let validationCode = document.getElementById("validation_code");
     let validationDate = document.getElementById("validation_date");
     if(this.info.code != null) {
@@ -89,19 +90,14 @@ export class ModalPharmacyPage {
               this.code = securityCode;
               result = true;
             }
-            else {
-              let result = false;
-            }
           });
-        }
-        else {
-          let result = false;
         }
         if(result) {
           this.verifyDetails(date, diffDays);
         }
         else {
-          this.writeMessage(result);
+          message = "El código de seguridad no fue encontrado.";
+          this.writeMessage(result, message);
         }
       }
       else 
@@ -112,9 +108,10 @@ export class ModalPharmacyPage {
   }
 
   verifyDetails(date, diffDays) {
+    let message = "";
     let result = false;
     if(this.code != null) {
-      if(new Date(this.code.creationDate) <= new Date(date) && new Date(date) < new Date(this.code.expirationDate)) {
+      if(new Date(this.code.creationDate) <= new Date(date) && new Date(date) <= new Date(this.code.expirationDate)) {
         if(diffDays < 30) {
           if(this.qr.status == "Activo") {
             result = true;
@@ -123,22 +120,35 @@ export class ModalPharmacyPage {
             if(new Date(date) < new Date(this.qr.modificationDate)) {
               result = true;
             }
+            else {
+              result = false;
+              message = "El código QR no se encuentra habilitado o fue deshabilitado antes de la fecha de generación de la prescripción médica.";
+            }
           }
           else {
             result = false;
+            message = "El código QR no se encuentra habilitado o fue deshabilitado antes de la fecha de generación de la prescripción médica.";
           }
         }
+        else {
+          result = false;
+          message = "La fecha de la prescripción es mayor a 30 días y no se encuentra vigente.";
+        }
+      }
+      else {
+        result = false;
+        message = "El código de seguridad ha expirado o fue creado posteriormente a la generación de la prescripción médica.";
       }
     }
 
-    this.writeMessage(result);
+    this.writeMessage(result, message);
   }
 
-  writeMessage(result) {
+  writeMessage(result, message) {
     if(result) {
-      let message = document.getElementById("message");
-      message.innerHTML = "La receta pasó la validación exitosamente.";
-      message.style.color = "green";
+      let messageHTML = document.getElementById("message");
+      messageHTML.innerHTML = "La prescripción médica es válida.";
+      messageHTML.style.color = "green";
 
       let pharmacy = this.globalDataCtrl.getPharmacy();
       let medicalreceipt = {
@@ -161,9 +171,9 @@ export class ModalPharmacyPage {
       });
     }
     else {
-      let message = document.getElementById("message");
-      message.innerHTML = "Error! La receta no pasó la validación.";
-      message.style.color = "red";
+      let messageHTML = document.getElementById("message");
+      messageHTML.innerHTML = message + " La prescripción médica no es válida.";
+      messageHTML.style.color = "red";
 
       let pharmacy = this.globalDataCtrl.getPharmacy();
       let medicalreceipt = {
@@ -173,7 +183,7 @@ export class ModalPharmacyPage {
         "pharmacyId": pharmacy.id,
         "uicId": this.qr.id,
         "securityCodeId": this.info.code,
-        "applicationMessage": "Alguno de los datos ingresados no es válido. La prescripción médica no es válida."
+        "applicationMessage": message + " La prescripción médica no es válida."
       }
 
       var apiURL = this.globalDataCtrl.getApiURL();

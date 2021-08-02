@@ -25,6 +25,7 @@ export class HomeDoctorsPage {
   activeQrs: any = [];
   inactiveQrs: any = [];
   allSecurityCodes: any = [];
+  securitycodes: any = [];
   code: any = {};
   security_code: boolean;
   all: boolean;
@@ -59,14 +60,31 @@ export class HomeDoctorsPage {
   }
 
   setActiveSecurityCode(){
+    this.securitycodes = [];
     var compareDate = function (scode1, scode2) {  
       var scode1Date = new Date(scode1.expirationDate).getTime();  
       var scode2Date = new Date(scode2.expirationDate).getTime();  
       return scode1Date > scode2Date ? -1 : 1;    
     }
     var sortedCodes = this.allSecurityCodes.sort(compareDate); 
+    this.allSecurityCodes.forEach(securityCode => {
+      securityCode.expirationDate = securityCode.expirationDate.split('T')[0];
+      let splitDate = securityCode.expirationDate.split("-");
+      let yy = splitDate[0];
+      let mm = splitDate[1];
+      let dd = splitDate[2];
+      let date = dd + "/" + mm + "/" + yy;
+      securityCode.expirationDate = date;
+      this.securitycodes.push(securityCode);
+    });
     this.code = sortedCodes[0]; 
-    this.code.expirationDate = new Date(this.code.expirationDate).toLocaleString().split(' ')[0];
+    let expirationDate = this.code.expirationDate.split('T')[0];
+    let splitDate = expirationDate.split("-");
+    let yy = splitDate[0];
+    let mm = splitDate[1];
+    let dd = splitDate[2];
+    let date = dd + "/" + mm + "/" + yy;
+    this.code.expirationDate = expirationDate;
     this.security_code = true; 
   }
   

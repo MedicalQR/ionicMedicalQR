@@ -27,7 +27,7 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-fab bottom right edge>
+  <ion-fab bottom right edge *ngIf="!security_code">
     <button ion-fab mini item-end (click)="createQR()">+</button>
   </ion-fab>
   <ion-list *ngIf="!security_code">
@@ -36,6 +36,7 @@
         <ion-thumbnail item-start>
           <ngx-qrcode [qrc-value]="qr.id"></ngx-qrcode>
         </ion-thumbnail>
+          {{this.qr.status}}
         <p item-end>&lt;</p>
       </ion-item>   
       <ion-item-options side="right">
@@ -44,16 +45,26 @@
         <button *ngIf="qr.status!=='Inactivo' && !all" ion-button color="danger" (click)="disable(qr)">Inhabilitar</button>
       </ion-item-options>
     </ion-item-sliding>
-  </ion-list>   
+  </ion-list>
   <ion-list *ngIf="security_code">
     <ion-item>
-      Código de Seguridad: {{this.code.securityNumber}}
-    </ion-item>  
-    <ion-item>
-      Fecha de expiración: {{this.code.expirationDate}}
-    </ion-item>    
+      <ion-label>
+        <h3>Código de Seguridad: {{this.code.securityNumber}}</h3>
+        <p>Fecha de expiración: {{this.code.expirationDate}}</p>
+      </ion-label>
+      <p item-end class="vigente">Vigente</p>
+    </ion-item>   
     <ion-item>
       <button ion-button color="primary" (click)="generateSecurityCode()">Generar nuevo código</button>
     </ion-item> 
+  </ion-list>      
+  <ion-list *ngIf="security_code">
+    <ion-item *ngFor="let securitycode of securitycodes; first as isFirst">
+      <ion-label *ngIf="!isFirst">
+        <h3>Código de Seguridad: {{securitycode.securityNumber}}</h3>
+        <p>Fecha de expiración: {{securitycode.expirationDate}}</p>
+      </ion-label>
+      <p item-end class="expirado" *ngIf="!isFirst">Expirado</p>
+    </ion-item>  
   </ion-list>   
 </ion-content>

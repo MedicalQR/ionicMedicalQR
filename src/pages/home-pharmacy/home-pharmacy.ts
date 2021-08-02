@@ -35,9 +35,8 @@ export class HomePharmacyPage {
   }
 
   scanCode() {
-    /*this.barcodeScanner.scan().then(barcodeData => {
-      this.scannedCode = barcodeData.text;*/
-      this.scannedCode = "5548ed03-1a6c-a352-db75-a0e1b1a480a6";
+    this.barcodeScanner.scan().then(barcodeData => {
+      this.scannedCode = barcodeData.text;
       var apiURL = this.globalDataCtrl.getApiURL();
       return new Promise(resolve => {
         this.http.get(apiURL+'UniqueIdentifierCodes/' + this.scannedCode).subscribe((data: any[]) => {
@@ -47,10 +46,10 @@ export class HomePharmacyPage {
           console.log(err);
         });
       });
-    /*}, 
+    }, 
     (err) => {
       alert('Error: ' + err);
-    });*/
+    });
   }
   
   getDoctorInformation() {

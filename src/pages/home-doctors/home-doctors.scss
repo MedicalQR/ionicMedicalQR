@@ -2,4 +2,14 @@ page-home-doctors {
     ion-fab[bottom][edge] {
         bottom:0px !important;
     }
+    .vigente {
+        color: green;
+    }
+    .expirado {
+        color: crimson;
+    }
+
+    .label-md {
+        margin-top: 15px;
+    }
 }
