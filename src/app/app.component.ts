@@ -28,6 +28,7 @@ export class MyApp {
   actualView: any;
   user : any = {};
   existingUser : any = {};
+  admins: any[];
   doctors: any[];
   pharmacies: any[];
   allRoles: any[];
@@ -67,20 +68,33 @@ export class MyApp {
       if (user) {
         this.uid  = user.uid;
         this.globalDataCtrl.setGmailId(this.uid);
-        this.getDoctors().then((result) => {
-          if(this.doctors.length > 0){
-            this.doctors.forEach(doctor => {
-              if(doctor.GmailID == this.uid){
-                this.existingUser = doctor;
-                this.setGlobalInformation(doctor.id, "Profesionales de la Salud");
-                if(this.existingUser.Status == 'Activo'){
-                  this.globalDataCtrl.setUserEmail(this.existingUser.email);
-                  this.globalDataCtrl.setHomePage(HomeDoctorsPage);
-                  this.setRootPage(HomeDoctorsPage);
-                } else {
-                  this.goToHome("Profesionales de la Salud");
-                  this.setRootPage(LoginPage);
-                }
+        this.getAdmins().then((result) => {
+          if(this.admins.length > 0){
+            this.admins.forEach(admin => {
+              if(admin.GmailID == this.uid){
+                this.existingUser = admin;
+                this.goToHome("Admin");
+                this.setRootPage(LoginPage);
+              }
+            });
+          }
+          if(this.existingUser == null){
+            this.getDoctors().then((result) => {
+              if(this.doctors.length > 0){
+                this.doctors.forEach(doctor => {
+                  if(doctor.GmailID == this.uid){
+                    this.existingUser = doctor;
+                    this.setGlobalInformation(doctor.id, "Profesionales de la Salud");
+                    if(this.existingUser.Status == 'Activo'){
+                      this.globalDataCtrl.setUserEmail(this.existingUser.email);
+                      this.globalDataCtrl.setHomePage(HomeDoctorsPage);
+                      this.setRootPage(HomeDoctorsPage);
+                    } else {
+                      this.goToHome("Profesionales de la Salud");
+                      this.setRootPage(LoginPage);
+                    }
+                  }
+                });
               }
             });
           }
@@ -141,6 +155,17 @@ export class MyApp {
     this.nav.push(RegisterPage);
   }
 
+  getAdmins(){
+    var apiURL = this.globalDataCtrl.getApiURL();
+    return new Promise(resolve => {
+      this.http.get(apiURL+'Admins').subscribe((data: any[]) => {
+        resolve(this.admins = data);
+      }, err => {
+        console.log(err);
+      });
+    });
+  }
+
   getDoctors(){
     var apiURL = this.globalDataCtrl.getApiURL();
     return new Promise(resolve => {
@@ -165,11 +190,17 @@ export class MyApp {
 
   goToHome(role_id){
     if (role_id == "Profesionales de la Salud"){ //Doctores
+      let title = "Pendiente de habilitación";
       let message = "El Ministerio de salud deberá habilitar tu registro en no menos de 48 horas, te avisaremos una vez el Ministerio habilite tu registro";
-      this.showPrompt(message);
-    }else if (role_id == "Farmacia"){ //Farmacias
+      this.showPrompt(title, message);
+    } else if (role_id == "Farmacia"){ //Farmacias
+      let title = "Registro exitoso";
       let message = "Por favor ingresa nuevamente tus datos para acceder a la aplicación";
-      this.showPrompt(message);
+      this.showPrompt(title, message);
+    } else if (role_id == "Admin"){ //Farmacias
+      let title = "Acceso denegado";
+      let message = "No puedes ingresar con este rol a través de la app. Por favor ingrese a través de la web.";
+      this.showPrompt(title, message);
     }
   }
 
@@ -178,9 +209,9 @@ export class MyApp {
     this.globalDataCtrl.setRole(role);
   }
 
-  showPrompt(message) {
+  showPrompt(title, message) {
     const alert = this.alertCtrl.create({
-      title: 'Pendiente de habilitación',
+      title: title,
       subTitle: message
     });
     alert.present().then(function(e) {

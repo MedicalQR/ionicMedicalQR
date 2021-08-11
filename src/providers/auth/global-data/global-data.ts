@@ -29,7 +29,7 @@ export class GlobalDataProvider {
     this.role = "";
     this.pharmacy = {};
     this.homePage = {};
-    this.apiUrl = 'http://medicalqrwebapp.azurewebsites.net/api/';
+    this.apiUrl = 'http://medicalqrrestapi.azurewebsites.net/api/';
   }
 
   setUser_id(value) {
